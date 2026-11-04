@@ -22,6 +22,7 @@ export function CameraController({ projection: p, focus }: { projection: PlatePr
   const size = useThree((s) => s.size);
   const current = useNavigationStore((s) => s.current);
   const reduced = useNavigationStore((s) => s.reducedMotion);
+  const entered = useNavigationStore((s) => s.entered);
   const setTransitioning = useNavigationStore((s) => s.setTransitioning);
 
   const dest = useRef({ x: 0, y: 0, z: 0, yaw: 0, pitch: 0, zoom: 1 });
@@ -32,9 +33,10 @@ export function CameraController({ projection: p, focus }: { projection: PlatePr
   // intro: ease in from slightly behind and above the home view
   useEffect(() => {
     if (reduced) { intro.current.k = 0; return; }
+    if (!entered) { intro.current.k = 1; return; }
     const tw = gsap.to(intro.current, { k: 0, duration: 6.5, ease: "power2.inOut", delay: 0.3 });
     return () => { tw.kill(); };
-  }, [reduced]);
+  }, [reduced, entered]);
 
   // destination transitions
   useEffect(() => {

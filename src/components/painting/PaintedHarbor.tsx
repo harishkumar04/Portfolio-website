@@ -13,6 +13,7 @@ import { useNavigationStore } from "@/store/navigationStore";
 import { PlateProjection } from "./projection";
 import { CraneRig } from "./CraneRig";
 import { CameraController } from "@/components/navigation/CameraController";
+import { Hotspots } from "./Hotspots";
 import { cardMaterial, driftMaterial, glowMaterial, glowTexture, projectedGroundMaterial, uvRect } from "./materials";
 import type { LayerDef, Px, SceneManifest, SpriteDef } from "./types";
 
@@ -81,6 +82,19 @@ export function PaintedHarbor({ url }: { url: string }) {
     for (const mat of animated.current) mat.uniforms.uTime.value = sceneClock.t;
   });
 
+  const setSceneReady = useNavigationStore((s) => s.setSceneReady);
+  useEffect(() => { setSceneReady(true); }, [setSceneReady]);
+
+  const depthOf = useCallback((id: string) => {
+    const L = m.layers.find((l) => l.id === id);
+    if (!L || L.type === "ground") return 1500;
+    return L.type === "sky" ? 5800 : layerDepth(p, L);
+  }, [m, p]);
+  const orderOf = useCallback((id: string) => {
+    const L = m.layers.find((l) => l.id === id);
+    return L && L.type === "card" ? L.order ?? 3 : 1.9;
+  }, [m]);
+
   const sprite = (role: SpriteDef["role"]) => m.sprites.find((s) => s.role === role);
   const craneLayer = m.crane ? m.layers.find((l) => l.id === m.crane!.card) : undefined;
   const sunUv = m.sun ? new Vector2(m.sun.at[0] / m.image.width, 1 - m.sun.at[1] / m.image.height) : undefined;
@@ -102,6 +116,7 @@ export function PaintedHarbor({ url }: { url: string }) {
       {m.sun && m.atmosphere?.sunBloom !== false && <SunBloom p={p} at={m.sun.at} radius={m.sun.radius} />}
       {m.atmosphere?.haze !== false && <HorizonHaze p={p} m={m} />}
       <Motes p={p} enabled={quality !== "low" && m.atmosphere?.motes !== false} />
+      <Hotspots p={p} depthOf={depthOf} orderOf={orderOf} />
       <CameraController projection={p} focus={m.focus} />
     </group>
   );

@@ -5,40 +5,50 @@ export type QualityTier = "high" | "medium" | "low";
 
 interface NavigationState {
   current: DestinationId;
-  /** True while the camera is moving — blocks conflicting interactions */
+  /** True while the camera is moving */
   transitioning: boolean;
   panelOpen: boolean;
-  hoverLabel: string | null;
+  /** Destination under the pointer (3D hotspot or beacon) */
+  hovered: DestinationId | null;
   selectedProject: string | null;
   selectedSkill: string | null;
   quality: QualityTier;
   reducedMotion: boolean;
+  /** The painted scene (or the fallback image) has finished loading */
+  sceneReady: boolean;
+  /** The visitor has passed the intro screen */
+  entered: boolean;
   go: (id: DestinationId) => void;
+  home: () => void;
   setTransitioning: (v: boolean) => void;
-  setHoverLabel: (l: string | null) => void;
+  setHovered: (id: DestinationId | null) => void;
   setSelectedProject: (id: string | null) => void;
   setSelectedSkill: (id: string | null) => void;
   setQuality: (q: QualityTier) => void;
   setReducedMotion: (v: boolean) => void;
+  setSceneReady: (v: boolean) => void;
+  enter: () => void;
 }
 
-export const useNavigationStore = create<NavigationState>((set, get) => ({
+export const useNavigationStore = create<NavigationState>((set) => ({
   current: "home",
   transitioning: false,
   panelOpen: false,
-  hoverLabel: null,
+  hovered: null,
   selectedProject: null,
   selectedSkill: null,
   quality: "high",
   reducedMotion: false,
-  go: (id) => {
-    if (get().transitioning && id === get().current) return;
-    set({ current: id, panelOpen: id !== "home", hoverLabel: null });
-  },
+  sceneReady: false,
+  entered: false,
+  go: (id) => set({ current: id, panelOpen: id !== "home", hovered: null }),
+  home: () => set({ current: "home", panelOpen: false, hovered: null }),
   setTransitioning: (transitioning) => set({ transitioning }),
-  setHoverLabel: (hoverLabel) => set({ hoverLabel }),
+  setHovered: (hovered) => set({ hovered }),
   setSelectedProject: (selectedProject) => set({ selectedProject }),
   setSelectedSkill: (selectedSkill) => set({ selectedSkill }),
   setQuality: (quality) => set({ quality }),
   setReducedMotion: (reducedMotion) => set({ reducedMotion }),
+  setSceneReady: (sceneReady) => set({ sceneReady }),
+  enter: () => set({ entered: true }),
 }));

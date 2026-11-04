@@ -29,3 +29,29 @@ html, body { height: 100%; background: var(--navy-900); color: var(--cream); fon
 }
 .harbor-kenburns { animation: harbor-kenburns 40s ease-in-out infinite alternate; transform-origin: 60% 45%; }
 @media (prefers-reduced-motion: reduce) { .harbor-kenburns { animation: none; } }
+
+/* ---- intro screen ---- */
+.intro { background: radial-gradient(120% 90% at 70% 60%, rgba(120, 45, 70, 0.35), rgba(7, 12, 26, 0.96) 60%), #070c1a; }
+
+/* ---- scene beacons ---- */
+.beacon { position: relative; display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem; background: none; border: 0; cursor: pointer; }
+.beacon-dot { position: relative; display: block; width: 14px; height: 14px; border-radius: 9999px; background: #ffd29a; box-shadow: 0 0 0 2px rgba(7, 12, 26, 0.55), 0 0 14px 3px rgba(255, 170, 80, 0.7); }
+.beacon-dot::after { content: ""; position: absolute; inset: -6px; border-radius: 9999px; border: 1.5px solid rgba(255, 200, 130, 0.75); animation: beacon-ping 2.6s ease-out infinite; }
+.beacon-label { opacity: 0; transform: translateX(-4px); white-space: nowrap; border-radius: 9999px; background: rgba(7, 12, 26, 0.78); padding: 0.2rem 0.65rem; font: 500 11px/1 var(--font-geist-mono), monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #ffe2b8; transition: opacity 0.2s, transform 0.2s; }
+.beacon:hover .beacon-label, .beacon:focus-visible .beacon-label { opacity: 1; transform: none; }
+.beacon:focus-visible { outline: 2px solid #f4b45c; outline-offset: 2px; border-radius: 9999px; }
+@media (hover: none) { .beacon-label { opacity: 1; transform: none; } }
+@keyframes beacon-ping { 0% { transform: scale(0.6); opacity: 0.9; } 80%, 100% { transform: scale(1.7); opacity: 0; } }
+
+/* ---- panels ---- */
+.panel { animation: panel-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes panel-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.panel-scroll { scrollbar-width: thin; scrollbar-color: rgba(244, 180, 92, 0.35) transparent; }
+.panel-scroll::-webkit-scrollbar { width: 6px; }
+.panel-scroll::-webkit-scrollbar-thumb { background: rgba(244, 180, 92, 0.3); border-radius: 9999px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .beacon-dot::after, .panel { animation: none; }
+  .intro, .beacon-label { transition: none; }
+}
+:focus-visible { outline-color: #f4b45c; }

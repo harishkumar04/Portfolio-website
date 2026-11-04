@@ -2,10 +2,16 @@ export type DestinationId = "home" | "about" | "skills" | "projects" | "experien
 
 export interface Destination {
   id: DestinationId;
+  /** Harbor-themed name of the place (e.g. "Cargo Manifest") */
   label: string;
-  /** Nautical-style section name shown in the UI */
+  /** Portfolio section name (e.g. "Skills") */
   title: string;
+  /** Keyboard shortcut */
   key: string;
+  /** Short line for hover labels */
+  hint: string;
+  /** Which side the content panel opens on (desktop), so it never covers the subject */
+  panelSide: "left" | "right";
   /** Camera framing relative to the painting's home view (metres / degrees / zoom factor) */
   camera: { offset: [number, number, number]; yaw: number; pitch: number; zoom: number };
 }
