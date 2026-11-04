@@ -1,0 +1,404 @@
+{
+ "name": "harbor",
+ "camera": {
+  "fov": 50,
+  "height": 14,
+  "horizonY": 597
+ },
+ "crane": {
+  "card": "craneBack",
+  "boom": [
+   [
+    420,
+    242
+   ],
+   [
+    1170,
+    242
+   ]
+  ],
+  "trolleyAt": [
+   885,
+   242
+  ],
+  "rigAt": [
+   907,
+   334
+  ],
+  "containerAt": [
+   913,
+   428
+  ],
+  "cableTops": [
+   [
+    889,
+    273
+   ],
+   [
+    897,
+    273
+   ],
+   [
+    905,
+    273
+   ],
+   [
+    913,
+    273
+   ],
+   [
+    921,
+    273
+   ],
+   [
+    929,
+    273
+   ]
+  ],
+  "cableBottoms": [
+   [
+    894,
+    337
+   ],
+   [
+    899,
+    337
+   ],
+   [
+    904,
+    337
+   ],
+   [
+    909,
+    337
+   ],
+   [
+    914,
+    337
+   ],
+   [
+    919,
+    337
+   ]
+  ],
+  "pickup": {
+   "trolleyX": 427,
+   "rigTopY": 600
+  },
+  "drop": {
+   "trolleyX": 935,
+   "rigTopY": 445
+  },
+  "hoistRigTopY": 300,
+  "cycle": 34,
+  "pickupHidden": true,
+  "clip": {
+   "x0": 840,
+   "x1": 1070,
+   "y": 486
+  }
+ },
+ "sun": {
+  "at": [
+   1345,
+   485
+  ],
+  "radius": 45
+ },
+ "focus": [
+  900,
+  450
+ ],
+ "image": {
+  "width": 1672,
+  "height": 941,
+  "clean": "clean.webp",
+  "plate": "plate.webp"
+ },
+ "layers": [
+  {
+   "id": "sky",
+   "type": "sky",
+   "file": "clean.webp",
+   "rect": [
+    0,
+    0,
+    1672,
+    941
+   ]
+  },
+  {
+   "id": "clouds",
+   "type": "card",
+   "depth": 5200,
+   "order": 1,
+   "feather": 30,
+   "drift": {
+    "maxShift": 26,
+    "period": 120
+   },
+   "file": "clouds.webp",
+   "rect": [
+    1117,
+    0,
+    1672,
+    537
+   ]
+  },
+  {
+   "id": "sea",
+   "type": "ground",
+   "groundY": 0,
+   "kind": "water",
+   "file": "sea.webp",
+   "rect": [
+    873,
+    589,
+    1672,
+    903
+   ]
+  },
+  {
+   "id": "quay",
+   "type": "ground",
+   "groundY": 3,
+   "file": "quay.webp",
+   "rect": [
+    508,
+    591,
+    1672,
+    941
+   ]
+  },
+  {
+   "id": "craneBack",
+   "type": "card",
+   "contactY": 700,
+   "ground": 3,
+   "order": 3,
+   "file": "craneBack.webp",
+   "rect": [
+    313,
+    0,
+    1194,
+    714
+   ]
+  },
+  {
+   "id": "ship",
+   "type": "card",
+   "contactY": 742,
+   "ground": 0,
+   "order": 5,
+   "bob": {
+    "amplitude": 0.1,
+    "roll": 0.14,
+    "period": 8
+   },
+   "file": "ship.webp",
+   "rect": [
+    591,
+    391,
+    1235,
+    755
+   ]
+  },
+  {
+   "id": "craneFront",
+   "type": "card",
+   "contactY": 700,
+   "ground": 3,
+   "order": 6,
+   "file": "craneFront.webp",
+   "rect": [
+    323,
+    143,
+    681,
+    714
+   ]
+  },
+  {
+   "id": "booth",
+   "type": "card",
+   "contactY": 746,
+   "ground": 3,
+   "order": 8.4,
+   "file": "booth.webp",
+   "rect": [
+    331,
+    631,
+    526,
+    756
+   ]
+  },
+  {
+   "id": "van",
+   "type": "card",
+   "contactY": 724,
+   "ground": 3,
+   "order": 8.45,
+   "file": "van.webp",
+   "rect": [
+    696,
+    679,
+    749,
+    733
+   ]
+  },
+  {
+   "id": "truck",
+   "type": "card",
+   "contactY": 786,
+   "ground": 3,
+   "order": 8.5,
+   "file": "truck.webp",
+   "rect": [
+    725,
+    689,
+    864,
+    795
+   ]
+  },
+  {
+   "id": "bollards",
+   "type": "card",
+   "contactY": 900,
+   "ground": 3,
+   "order": 8.6,
+   "file": "bollards.webp",
+   "rect": [
+    988,
+    726,
+    1622,
+    938
+   ]
+  },
+  {
+   "id": "tower",
+   "type": "card",
+   "depth": 48,
+   "order": 8.8,
+   "file": "tower.webp",
+   "rect": [
+    0,
+    29,
+    434,
+    570
+   ]
+  },
+  {
+   "id": "foreground",
+   "type": "card",
+   "depth": 17,
+   "order": 9,
+   "file": "foreground.webp",
+   "rect": [
+    0,
+    332,
+    588,
+    941
+   ]
+  },
+  {
+   "id": "plant",
+   "type": "card",
+   "depth": 9,
+   "order": 9.5,
+   "file": "plant.webp",
+   "rect": [
+    605,
+    822,
+    915,
+    941
+   ]
+  },
+  {
+   "id": "leaves",
+   "type": "card",
+   "depth": 6,
+   "order": 9.6,
+   "file": "leaves.webp",
+   "rect": [
+    0,
+    0,
+    343,
+    115
+   ]
+  }
+ ],
+ "sprites": [
+  {
+   "id": "trolley",
+   "role": "trolley",
+   "card": "craneBack",
+   "order": 5.8,
+   "matte": "difference",
+   "file": "trolley.webp",
+   "rect": [
+    809,
+    205,
+    961,
+    282
+   ]
+  },
+  {
+   "id": "spreader",
+   "role": "spreader",
+   "card": "craneBack",
+   "order": 5.6,
+   "matte": "difference",
+   "file": "spreader.webp",
+   "rect": [
+    847,
+    327,
+    972,
+    406
+   ]
+  },
+  {
+   "id": "container",
+   "role": "container",
+   "card": "craneBack",
+   "order": 5.5,
+   "file": "container.webp",
+   "rect": [
+    841,
+    395,
+    987,
+    462
+   ]
+  },
+  {
+   "id": "shipFarA",
+   "role": "distantShip",
+   "contactY": 610,
+   "ground": 0,
+   "order": 2,
+   "speed": 1.1,
+   "travel": 520,
+   "file": "shipFarA.webp",
+   "rect": [
+    1336,
+    547,
+    1448,
+    619
+   ]
+  },
+  {
+   "id": "shipFarB",
+   "role": "distantShip",
+   "contactY": 612,
+   "ground": 0,
+   "order": 2,
+   "speed": 0.8,
+   "travel": 640,
+   "file": "shipFarB.webp",
+   "rect": [
+    1502,
+    536,
+    1643,
+    621
+   ]
+  }
+ ]
+}

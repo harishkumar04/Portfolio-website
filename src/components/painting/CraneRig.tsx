@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import gsap from "gsap";
-import { BufferAttribute, BufferGeometry, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, type Texture } from "three";
+import { BufferAttribute, BufferGeometry, DoubleSide, Mesh, MeshBasicMaterial, Plane, PlaneGeometry, Quaternion, Vector3, type Texture } from "three";
 import { sceneClock } from "@/lib/clock";
 import { cardMaterial } from "./materials";
 import type { PlateProjection } from "./projection";
@@ -49,12 +49,18 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
     return { trolley: size(sprites.trolley.rect), spreader: size(sprites.spreader.rect), container: size(sprites.container.rect), cables: g };
   }, [crane, sprites, s]);
 
-  const mats = useMemo(() => ({
-    trolley: cardMaterial(textures[sprites.trolley.id]),
-    spreader: cardMaterial(textures[sprites.spreader.id]),
-    container: cardMaterial(textures[sprites.container.id]),
-    cable: new MeshBasicMaterial({ color: "#1a1b20", transparent: true, opacity: 0.92, depthWrite: false, toneMapped: false, side: DoubleSide }),
-  }), [textures, sprites]);
+  // one clipping plane shared by the load: active only over the drop slot (stack-top row)
+  const clip = useMemo(() => new Plane(new Vector3(0, 1, 0), 1e6), []);
+  const mats = useMemo(() => {
+    const m = {
+      trolley: cardMaterial(textures[sprites.trolley.id]),
+      spreader: cardMaterial(textures[sprites.spreader.id]),
+      container: cardMaterial(textures[sprites.container.id]),
+      cable: new MeshBasicMaterial({ color: "#23232c", transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false, side: DoubleSide }),
+    };
+    m.spreader.clippingPlanes = m.container.clippingPlanes = m.cable.clippingPlanes = [clip];
+    return m;
+  }, [textures, sprites, clip]);
   useEffect(() => () => { Object.values(geo).forEach((g) => g.dispose()); Object.values(mats).forEach((m) => m.dispose()); }, [geo, mats]);
 
   // the loading cycle, in pixels on the painted crane
@@ -128,7 +134,7 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
     }
     // cables: thin quads from the trolley sheaves to the spreader head
     const attr = geo.cables.getAttribute("position") as BufferAttribute;
-    const w = 1.1 * s;
+    const w = 0.75 * s;
     crane.cableTops.forEach((top, i) => {
       const bottom = crane.cableBottoms[i];
       const [x0, y0] = local([st.tx + (top[0] - tax), tyAnchor + (top[1] - tay)]);
@@ -140,6 +146,17 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
     });
     attr.needsUpdate = true;
     geo.cables.computeBoundingSphere();
+
+    // sink into the ship: clip the load at the stack-top row while it is over the drop slot
+    const frame = container.current?.parent;
+    if (frame && crane.clip) {
+      const loadX = st.carry === ABOARD ? p.aboard[0] : rigX;
+      if (loadX > crane.clip.x0 && loadX < crane.clip.x1) {
+        const up = new Vector3(0, 1, 0).applyQuaternion(frame.getWorldQuaternion(new Quaternion()));
+        const [, cy] = local([loadX, crane.clip.y]);
+        clip.setFromNormalAndCoplanarPoint(up, frame.localToWorld(new Vector3(0, cy, 0)));
+      } else clip.set(new Vector3(0, 1, 0), 1e6);
+    }
   });
 
   const order = (sp: SpriteDef, d: number) => sp.order ?? d;

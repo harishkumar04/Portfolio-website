@@ -26,6 +26,7 @@ export default function HarborCanvas() {
         gl.toneMapping = NoToneMapping; // the painting is already graded
         gl.outputColorSpace = SRGBColorSpace;
         gl.setClearColor(0x000000, 0);
+        gl.localClippingEnabled = true; // the crane load sinks into the ship via a clipping plane
       }}
     >
       <SceneClock />

@@ -46,6 +46,8 @@ export interface CraneDef {
   cycle: number;
   /** pickup spot is occluded in the painting, so a fresh container can appear without a fade */
   pickupHidden?: boolean;
+  /** over the drop slot, the load is clipped at the stack-top row so it sinks into the ship */
+  clip?: { x0: number; x1: number; y: number };
 }
 
 export interface SceneManifest {
@@ -58,4 +60,6 @@ export interface SceneManifest {
   sprites: SpriteDef[];
   crane?: CraneDef;
   glows?: { at: Px; card: string; size: number; color: string; pulse?: number }[];
+  /** optional atmosphere on top of the painting (all default on) */
+  atmosphere?: { sunBloom?: boolean; haze?: boolean; motes?: boolean };
 }

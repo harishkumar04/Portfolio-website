@@ -156,8 +156,18 @@ def main(cfg_path):
         scene["layers"].append(entry)
 
     # 3. moving sprites from the original painting
+    orig_f = np.asarray(src, np.float32)
+    clean_f = np.asarray(clean_img, np.float32)
     for S in cfg.get("sprites", []):
         m = poly_mask((W, H), polys_of(S), feather=S.get("feather", 0.8))
+        if S.get("matte") == "difference":
+            # keep only pixels that differ from the clean plate behind them: sky / girder fragments
+            # caught inside the polygon become transparent, so nothing "travels" with the sprite
+            lo, hi = S.get("matteRange", [14, 42])
+            dist = np.sqrt(((orig_f - clean_f) ** 2).sum(axis=2))
+            a = np.clip((dist - lo) / (hi - lo), 0, 1)
+            a = cv2.GaussianBlur(a, (0, 0), 0.7)
+            m = Image.fromarray((np.asarray(m, np.float32) * a).astype(np.uint8))
         rect = bbox(m, pad=2)
         fname = f'{S["id"]}.webp'
         save_rgba(src, m, rect, os.path.join(out, fname), q)

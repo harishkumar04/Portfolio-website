@@ -99,9 +99,9 @@ export function PaintedHarbor({ url }: { url: string }) {
             sprites={{ trolley: sprite("trolley")!, spreader: sprite("spreader")!, container: sprite("container")! }} />
         </CardFrame>
       )}
-      {m.sun && <SunBloom p={p} at={m.sun.at} radius={m.sun.radius} />}
-      <HorizonHaze p={p} m={m} />
-      <Motes p={p} enabled={quality !== "low"} />
+      {m.sun && m.atmosphere?.sunBloom !== false && <SunBloom p={p} at={m.sun.at} radius={m.sun.radius} />}
+      {m.atmosphere?.haze !== false && <HorizonHaze p={p} m={m} />}
+      <Motes p={p} enabled={quality !== "low" && m.atmosphere?.motes !== false} />
       <CameraController projection={p} focus={m.focus} />
     </group>
   );
