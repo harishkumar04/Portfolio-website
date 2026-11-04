@@ -3,52 +3,53 @@ import type { DestinationId } from "@/types";
 
 export type QualityTier = "high" | "medium" | "low";
 
+/**
+ * Meaningful shared state only. Anything that changes every frame (scroll position, camera pose,
+ * pointer) lives in the mutable `journey` object (lib/journey.ts), never here.
+ */
 interface NavigationState {
-  current: DestinationId;
-  /** True while the camera is moving */
-  transitioning: boolean;
-  panelOpen: boolean;
-  /** Destination under the pointer (3D hotspot or beacon) */
-  hovered: DestinationId | null;
+  /** Section currently in view (driven by scroll) */
+  active: DestinationId;
   selectedProject: string | null;
-  selectedSkill: string | null;
+  selectedSkill: string;
+  /** Hotspot under the pointer, e.g. "nav:about" */
+  hovered: string | null;
   quality: QualityTier;
   reducedMotion: boolean;
   /** The painted scene (or the fallback image) has finished loading */
   sceneReady: boolean;
-  /** The visitor has passed the intro screen */
+  /** The loading screen has handed over to the experience */
   entered: boolean;
-  go: (id: DestinationId) => void;
-  home: () => void;
-  setTransitioning: (v: boolean) => void;
-  setHovered: (id: DestinationId | null) => void;
-  setSelectedProject: (id: string | null) => void;
-  setSelectedSkill: (id: string | null) => void;
+  /** WebGL scene available (false = painted fallback) */
+  webgl: boolean | null;
+  setActive: (id: DestinationId) => void;
+  selectProject: (id: string | null) => void;
+  selectSkill: (id: string) => void;
+  setHovered: (key: string | null) => void;
   setQuality: (q: QualityTier) => void;
   setReducedMotion: (v: boolean) => void;
   setSceneReady: (v: boolean) => void;
+  setWebgl: (v: boolean) => void;
   enter: () => void;
 }
 
 export const useNavigationStore = create<NavigationState>((set) => ({
-  current: "home",
-  transitioning: false,
-  panelOpen: false,
-  hovered: null,
+  active: "home",
   selectedProject: null,
-  selectedSkill: null,
+  selectedSkill: "cloud",
+  hovered: null,
   quality: "high",
   reducedMotion: false,
   sceneReady: false,
   entered: false,
-  go: (id) => set({ current: id, panelOpen: id !== "home", hovered: null }),
-  home: () => set({ current: "home", panelOpen: false, hovered: null }),
-  setTransitioning: (transitioning) => set({ transitioning }),
+  webgl: null,
+  setActive: (active) => set({ active }),
+  selectProject: (selectedProject) => set({ selectedProject }),
+  selectSkill: (selectedSkill) => set({ selectedSkill }),
   setHovered: (hovered) => set({ hovered }),
-  setSelectedProject: (selectedProject) => set({ selectedProject }),
-  setSelectedSkill: (selectedSkill) => set({ selectedSkill }),
   setQuality: (quality) => set({ quality }),
   setReducedMotion: (reducedMotion) => set({ reducedMotion }),
   setSceneReady: (sceneReady) => set({ sceneReady }),
+  setWebgl: (webgl) => set({ webgl }),
   enter: () => set({ entered: true }),
 }));

@@ -4,15 +4,20 @@ An interactive harbor portfolio. A painted sunset container terminal is rebuilt 
 scene in React Three Fiber: the crane loads a ship continuously, the sea ripples, clouds drift,
 and the camera moves between five destinations.
 
-| Place in the harbor | Section |
-|---|---|
-| Control tower (top) | About |
-| Foreground containers | Skills |
-| Cargo ship | Projects |
-| Control tower (shaft) | Experience |
-| Open sea and sun | Contact |
+The page scrolls natively. One ScrollTrigger feeds a single journey state (`src/lib/journey.ts`), and the
+harbor camera, nav, progress rail and reveals all read from it.
 
-Navigate with the scene (hover/click/tap), the top menu, or the keyboard: `1`–`5`, `0`, `←`/`→`, `Esc`.
+| Section | Where in the harbor | What happens |
+|---|---|---|
+| 01 Arrival | Whole harbor | Title sequence over the working crane |
+| 02 About | Control tower | Camera approaches the tower |
+| 03 Skills | Foreground containers | Six containers, each opens a manifest of tools |
+| 04 Projects | Cargo ship | Six container columns on the ship = six projects, plus the crane's load |
+| 05 Experience | Wider quay view | Route line draws with the scroll, one milestone at a time |
+| 06 Contact | Open sea and sun | Slow pull-back, contact links, resume download |
+
+Links: `#about`, `#skills`, `#projects`, `#projects/<project-id>`, `#experience`, `#contact`.
+Keyboard: `Tab`/`Enter`, `Esc` closes a project, `←`/`→` step through projects, arrows move between skill containers.
 
 ## Run
 
@@ -31,8 +36,10 @@ Deploys as-is to Vercel (or any Node host); there are no environment variables.
 | `src/config/portfolio.ts` | Name, intro, summary, contact, links, education, experience, certifications, milestones |
 | `src/config/projects.ts` | Projects and their GitHub links |
 | `src/config/skills.ts` | Skill containers and items |
-| `src/config/navigation.ts` | Destination names, shortcuts, camera framings |
-| `src/config/hotspots.ts` | Clickable regions and beacon positions (painting pixels) |
+| `src/config/navigation.ts` | Section names and the camera framing + scroll span of each section |
+| `src/config/hotspots.ts` | Clickable regions and tag positions (painting pixels) |
+| `public/resume/` | The downloadable resume (`portfolio.resume` points at it) |
+| `src/app/globals.css` | Design tokens (colours, fonts) and shared UI classes |
 
 ## The artwork
 
@@ -45,6 +52,8 @@ npm run art:build -- art/harbor/layers.json     # writes public/art/harbor/
 ```
 
 Replace the plate and adjust the polygons to use new artwork. See `ATTRIBUTIONS.md`.
+
+Projects accept optional `demo` and `image` fields (`src/config/projects.ts`); they appear when set.
 
 ## Accessibility and fallbacks
 

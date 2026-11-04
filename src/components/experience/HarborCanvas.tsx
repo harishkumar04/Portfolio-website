@@ -18,7 +18,7 @@ export default function HarborCanvas() {
   const quality = useNavigationStore((s) => s.quality);
   return (
     <Canvas
-      className="!absolute inset-0"
+      className="!absolute inset-0" style={{ touchAction: "pan-y", overflow: "clip" }}
       dpr={DPR[quality]}
       camera={{ fov: 40, near: 0.5, far: 20000, position: [0, 10, 0] }}
       gl={{ antialias: quality !== "low", alpha: true, powerPreference: "high-performance" }}

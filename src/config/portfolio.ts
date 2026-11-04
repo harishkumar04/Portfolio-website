@@ -5,9 +5,11 @@ import type { Portfolio } from "@/types";
  * Everything here comes from the resume — edit freely, nothing else needs to change.
  */
 export const portfolio: Portfolio = {
+  resume: { href: "/resume/R_Harish_Kumar_Resume.pdf", filename: "R_Harish_Kumar_Resume.pdf" },
   name: "R Harish Kumar",
   firstName: "Harish",
-  tagline: "Cloud & DevOps Engineer",
+  tagline: "Building, deploying and scaling technology.",
+  disciplines: ["Cloud", "DevOps", "Infrastructure", "Automation"],
   intro: [
     "Hi, I'm Harish.",
     "I enjoy building reliable infrastructure, automating deployments, and exploring cloud-native technologies.",
@@ -16,7 +18,7 @@ export const portfolio: Portfolio = {
   interests: ["DevOps", "Cloud Engineering", "Platform Engineering", "Site Reliability Engineering"],
   summary:
     "AWS Certified Cloud Practitioner and a final-year Computer Science student with a strong foundation in cloud technologies and hands-on experience through academic projects and certifications. Passionate about building scalable, efficient systems and contributing to innovative cloud-based solutions.",
-  closingLine: "Every journey starts somewhere. Let's build something beyond the horizon.",
+  closingLine: "Let's build something meaningful.",
   contact: { email: "rharish0909@gmail.com", location: "Chennai, Tamil Nadu" },
   links: {
     github: { label: "GitHub", href: "https://github.com/harishkumar04" },
@@ -50,9 +52,10 @@ export const portfolio: Portfolio = {
       period: "June 2024 – July 2024",
       location: "Chennai, Tamil Nadu",
       details: [
-        "Worked with Docker, MySQL, Linux, Zabbix, ELK Stack (log management) and Grafana for system monitoring and visualization.",
+        "Worked on system monitoring and visualization with log management in the ELK Stack.",
         "Built a real-time Grafana dashboard on COVID-19 datasets, integrating MySQL for efficient data retrieval and dynamic monitoring.",
       ],
+      tools: ["Docker", "MySQL", "Linux", "Zabbix", "ELK Stack", "Grafana"],
     },
     {
       id: "nextgen",

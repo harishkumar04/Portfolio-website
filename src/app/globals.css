@@ -1,57 +1,109 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   DESIGN TOKENS. Derived from the harbor painting (dusk violet, coral, amber).
+   Every colour in the UI comes from here; components never hardcode their own.
+   ========================================================================== */
+@theme {
+  --color-midnight: #0b0f1a;
+  --color-deep-navy: #121b2d;
+  --color-harbor-slate: #272f44;
+  --color-ocean-blue: #426477;
+  --color-mist-blue: #738b91;
+  --color-sunset-amber: #e0a05a;
+  --color-golden-sand: #edc992;
+  --color-warm-ivory: #f2ebdd;
+  --color-rust: #a55d49;
+  --color-muted-grey: #a8b0ac;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --radius-ui: 10px;
+}
+
 :root {
-  --navy-950: #070c1a;
-  --navy-900: #0b1226;
-  --navy-800: #121b36;
-  --amber-400: #f4b45c;
-  --amber-500: #e8913a;
-  --cream: #f3e6d0;
+  --surface: rgb(18 27 45 / 0.9);
+  --line: rgb(242 235 221 / 0.12);
+  --line-strong: rgb(242 235 221 / 0.24);
+  --fluid-body: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
 }
 
-@theme inline {
-  --color-navy-950: var(--navy-950);
-  --color-navy-900: var(--navy-900);
-  --color-navy-800: var(--navy-800);
-  --color-amber-400: var(--amber-400);
-  --color-amber-500: var(--amber-500);
-  --color-cream: var(--cream);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html { background: var(--color-midnight); color: var(--color-warm-ivory); -webkit-text-size-adjust: 100%; }
+html.is-loading { overflow: hidden; }
+body { font-family: var(--font-sans); font-size: var(--fluid-body); line-height: 1.6; background: var(--color-midnight); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--color-sunset-amber); color: var(--color-midnight); }
+:focus-visible { outline: 2px solid var(--color-sunset-amber); outline-offset: 3px; border-radius: 4px; }
+[tabindex="-1"]:focus-visible { outline: none; }
+
+/* ---- typography ---- */
+.display { font-family: var(--font-display); font-weight: 350; letter-spacing: -0.015em; line-height: 1.04; font-optical-sizing: auto; }
+.h-section { font-family: var(--font-display); font-weight: 350; font-size: clamp(2rem, 1.4rem + 2.4vw, 3.4rem); line-height: 1.06; letter-spacing: -0.015em; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--color-sunset-amber); }
+.meta { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted-grey); }
+.lede { color: var(--color-warm-ivory); font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
+.copy { color: var(--color-muted-grey); max-width: 62ch; }
+.mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.mask > span { display: block; will-change: transform; }
+.on-art { text-shadow: 0 1px 18px rgb(8 12 22 / 0.75), 0 0 2px rgb(8 12 22 / 0.5); }
+
+/* ---- surfaces ---- */
+.surface { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-ui); box-shadow: 0 18px 50px -24px rgb(0 0 0 / 0.7); }
+.rule { height: 1px; background: var(--line); }
+
+/* ---- buttons ---- */
+.btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; min-height: 44px; padding: 0.7rem 1.35rem; border-radius: 999px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background-color 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.3s, transform 0.25s var(--ease-out-quart); }
+.btn .arrow { transition: transform 0.3s var(--ease-out-quart); }
+.btn:hover .arrow { transform: translateX(4px); }
+.btn:active { transform: translateY(1px) scale(0.985); }
+.btn-primary { background: var(--color-sunset-amber); color: var(--color-deep-navy); border: 1px solid var(--color-sunset-amber); }
+.btn-primary:hover { background: var(--color-golden-sand); border-color: var(--color-golden-sand); box-shadow: 0 0 28px -6px rgb(224 160 90 / 0.65); }
+.btn-secondary { background: rgb(18 27 45 / 0.55); color: var(--color-warm-ivory); border: 1px solid var(--line-strong); }
+.btn-secondary:hover { border-color: var(--color-sunset-amber); color: var(--color-golden-sand); background: rgb(18 27 45 / 0.8); }
+.btn-quiet { min-height: 40px; padding: 0.5rem 0.9rem; border: 1px solid var(--line); color: var(--color-muted-grey); background: transparent; }
+.btn-quiet:hover { color: var(--color-golden-sand); border-color: var(--color-sunset-amber); }
+
+.chip { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 6px; padding: 0.22rem 0.6rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--color-warm-ivory); background: rgb(242 235 221 / 0.04); }
+
+/* ---- scene tags (hotspot markers on the harbor) ---- */
+.tag-beacon { display: flex; align-items: center; gap: 0.5rem; min-height: 44px; min-width: 44px; padding: 0 0.4rem; background: none; border: 0; cursor: pointer; transition: opacity 0.3s; }
+.tag-dot { position: relative; flex: none; width: 12px; height: 12px; border-radius: 999px; background: var(--color-golden-sand); box-shadow: 0 0 0 2px rgb(11 15 26 / 0.6), 0 0 14px 2px rgb(224 160 90 / 0.65); transition: transform 0.25s; }
+.tag-dot::after { content: ""; position: absolute; inset: -6px; border-radius: 999px; border: 1px solid rgb(237 201 146 / 0.7); animation: ping 2.8s ease-out infinite; }
+.tag-text { white-space: nowrap; border-radius: 4px; background: rgb(11 15 26 / 0.82); border: 1px solid var(--line); padding: 0.22rem 0.5rem; font: 500 0.68rem/1 var(--font-geist-mono), monospace; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-golden-sand); transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+.tag-beacon:hover .tag-dot, .tag-beacon:focus-visible .tag-dot { transform: scale(1.25); }
+.tag-beacon:hover .tag-text { border-color: var(--color-sunset-amber); }
+.tag-beacon.is-selected .tag-text { background: var(--color-sunset-amber); color: var(--color-deep-navy); border-color: var(--color-sunset-amber); }
+.tag-beacon.nav .tag-text { opacity: 0; transform: translateX(-4px); transition: opacity 0.2s, transform 0.2s; }
+.tag-beacon.nav:hover .tag-text, .tag-beacon.nav:focus-visible .tag-text { opacity: 1; transform: none; }
+@media (hover: none) { .tag-beacon.nav .tag-text { opacity: 1; transform: none; } }
+@keyframes ping { 0% { transform: scale(0.6); opacity: 0.9; } 80%, 100% { transform: scale(1.8); opacity: 0; } }
+
+/* ---- reveal initial states (JS adds `js`; reduced-motion users never get hidden content) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal], html.js [data-item] { opacity: 0; }
 }
 
-html, body { height: 100%; background: var(--navy-900); color: var(--cream); font-family: var(--font-geist-sans), system-ui, sans-serif; }
+/* ---- scroll hint ---- */
+.scroll-line { position: relative; width: 1px; height: 44px; background: var(--line-strong); overflow: hidden; }
+.scroll-line::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--color-sunset-amber); animation: scroll-hint 2.2s var(--ease-out-quart) infinite; }
+@keyframes scroll-hint { to { top: 110%; } }
 
-/* No-WebGL fallback: a slow cinematic drift over the painting. */
-@keyframes harbor-kenburns {
-  from { transform: scale(1.04) translate(0, 0); }
-  to { transform: scale(1.1) translate(-1.6%, -0.8%); }
-}
-.harbor-kenburns { animation: harbor-kenburns 40s ease-in-out infinite alternate; transform-origin: 60% 45%; }
-@media (prefers-reduced-motion: reduce) { .harbor-kenburns { animation: none; } }
+/* ---- no-WebGL fallback ---- */
+.fallback-plate { transition: transform 0.9s var(--ease-out-quart); will-change: transform; }
 
-/* ---- intro screen ---- */
-.intro { background: radial-gradient(120% 90% at 70% 60%, rgba(120, 45, 70, 0.35), rgba(7, 12, 26, 0.96) 60%), #070c1a; }
-
-/* ---- scene beacons ---- */
-.beacon { position: relative; display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem; background: none; border: 0; cursor: pointer; }
-.beacon-dot { position: relative; display: block; width: 14px; height: 14px; border-radius: 9999px; background: #ffd29a; box-shadow: 0 0 0 2px rgba(7, 12, 26, 0.55), 0 0 14px 3px rgba(255, 170, 80, 0.7); }
-.beacon-dot::after { content: ""; position: absolute; inset: -6px; border-radius: 9999px; border: 1.5px solid rgba(255, 200, 130, 0.75); animation: beacon-ping 2.6s ease-out infinite; }
-.beacon-label { opacity: 0; transform: translateX(-4px); white-space: nowrap; border-radius: 9999px; background: rgba(7, 12, 26, 0.78); padding: 0.2rem 0.65rem; font: 500 11px/1 var(--font-geist-mono), monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #ffe2b8; transition: opacity 0.2s, transform 0.2s; }
-.beacon:hover .beacon-label, .beacon:focus-visible .beacon-label { opacity: 1; transform: none; }
-.beacon:focus-visible { outline: 2px solid #f4b45c; outline-offset: 2px; border-radius: 9999px; }
-@media (hover: none) { .beacon-label { opacity: 1; transform: none; } }
-@keyframes beacon-ping { 0% { transform: scale(0.6); opacity: 0.9; } 80%, 100% { transform: scale(1.7); opacity: 0; } }
-
-/* ---- panels ---- */
-.panel { animation: panel-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-@keyframes panel-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.panel-scroll { scrollbar-width: thin; scrollbar-color: rgba(244, 180, 92, 0.35) transparent; }
-.panel-scroll::-webkit-scrollbar { width: 6px; }
-.panel-scroll::-webkit-scrollbar-thumb { background: rgba(244, 180, 92, 0.3); border-radius: 9999px; }
+/* scrollbars in panels */
+.slim-scroll { scrollbar-width: thin; scrollbar-color: rgb(224 160 90 / 0.4) transparent; }
+.slim-scroll::-webkit-scrollbar { width: 6px; }
+.slim-scroll::-webkit-scrollbar-thumb { background: rgb(224 160 90 / 0.35); border-radius: 999px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .beacon-dot::after, .panel { animation: none; }
-  .intro, .beacon-label { transition: none; }
+  .tag-dot::after, .scroll-line::after { animation: none; }
+  *, *::before, *::after { scroll-behavior: auto !important; }
 }
-:focus-visible { outline-color: #f4b45c; }
+
+/* dynamic content (swapped by interaction) enters with a CSS rise; delay via --i */
+.rise { animation: rise 0.6s var(--ease-out-quart) both; animation-delay: calc(var(--i, 0) * 55ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .rise { animation: fade-only 0.25s both; } @keyframes fade-only { from { opacity: 0; } to { opacity: 1; } } }

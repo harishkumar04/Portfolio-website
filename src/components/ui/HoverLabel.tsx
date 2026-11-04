@@ -1,28 +1,28 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { destinationById } from "@/config/navigation";
+import { hotspotByKey } from "@/config/hotspots";
 import { useNavigationStore } from "@/store/navigationStore";
 
-/** Label that follows the pointer while it is over a clickable part of the harbor. */
+/** Contextual label that follows a fine pointer while it is over a clickable part of the harbor. */
 export function HoverLabel() {
   const hovered = useNavigationStore((s) => s.hovered);
-  const current = useNavigationStore((s) => s.current);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const move = (e: PointerEvent) => {
-      if (ref.current) ref.current.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 18}px)`;
+      if (e.pointerType !== "mouse" || !ref.current) return;
+      ref.current.style.transform = `translate(${e.clientX + 18}px, ${e.clientY + 20}px)`;
     };
-    window.addEventListener("pointermove", move);
+    window.addEventListener("pointermove", move, { passive: true });
     return () => window.removeEventListener("pointermove", move);
   }, []);
-  const show = hovered && hovered !== current;
-  const d = hovered ? destinationById(hovered) : null;
+  const h = hotspotByKey(hovered);
+  const verb = h?.kind === "nav" ? "Go to" : h?.kind === "skill" ? "Open" : "Open";
   return (
-    <div ref={ref} className="pointer-events-none fixed top-0 left-0 z-40 hidden md:block" aria-hidden>
-      <div className={`rounded-xl border border-amber-300/25 bg-navy-900/80 px-3.5 py-2 backdrop-blur-sm transition-opacity duration-200 ${show ? "opacity-100" : "opacity-0"}`}>
-        <p className="font-mono text-[10px] tracking-[0.25em] text-amber-300 uppercase">{d?.label}</p>
-        <p className="text-sm text-cream">{d?.title} <span className="text-cream/55">· {d?.hint}</span></p>
+    <div ref={ref} className="pointer-events-none fixed top-0 left-0 z-[55] hidden [@media(hover:hover)]:block" aria-hidden>
+      <div className={`surface px-3.5 py-2.5 transition-opacity duration-200 ${h ? "opacity-100" : "opacity-0"}`}>
+        <p className="eyebrow">{h?.tag}</p>
+        <p className="mt-0.5 text-sm text-warm-ivory">{h && `${verb} ${h.label}`}{h?.hint && h.kind !== "nav" ? <span className="text-muted-grey"> · {h.hint}</span> : null}</p>
       </div>
     </div>
   );

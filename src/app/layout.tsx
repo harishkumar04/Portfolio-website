@@ -1,10 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz"],
 });
 
 const geistMono = Geist_Mono({
@@ -22,15 +28,19 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, images: ["/art/harbor/plate.webp"] },
 };
 
-export const viewport: Viewport = { themeColor: "#0b1226", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#0b0f1a", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}
     >
-      <body className="min-h-full bg-[#0b1226] text-[#f3e6d0]">{children}</body>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js','is-loading')" }} />
+        {children}
+      </body>
     </html>
   );
 }
