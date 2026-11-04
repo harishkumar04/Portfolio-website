@@ -183,21 +183,20 @@ export function focusOnHotspot(key: string, strength = 0.45, zoom = 1.12) {
 
 /* ------------------------------------------------------------ project + skill selection */
 
-export function chooseProject(id: string | null, opts: { push?: boolean } = {}) {
-  const { push = true } = opts;
+export function chooseProject(id: string | null) {
   const s = useNavigationStore.getState();
   if (s.selectedProject === id) return;
   s.selectProject(id);
   s.setHovered(null);
-  if (push && s.active === "projects") syncHash("projects", false);
   if (id) focusOnHotspot(`project:${id}`, 0.5, 1.14); else focusCamera(null);
+  if (id && s.active === "projects") history.replaceState(null, "", `${location.pathname}${location.search}#projects/${id}`);
 }
 
 export function stepProject(dir: 1 | -1) {
   const s = useNavigationStore.getState();
   const i = projects.findIndex((p) => p.id === s.selectedProject);
   if (i < 0) return;
-  chooseProject(projects[(i + dir + projects.length) % projects.length].id, { push: false });
+  chooseProject(projects[(i + dir + projects.length) % projects.length].id);
   history.replaceState(null, "", `${location.pathname}${location.search}#projects/${useNavigationStore.getState().selectedProject}`);
 }
 
@@ -243,7 +242,6 @@ export function initJourney(): () => void {
     if (t && (t.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(t.tagName))) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const s = useNavigationStore.getState();
-    if (e.key === "Escape" && s.selectedProject) { chooseProject(null); return; }
     if (s.active === "projects" && s.selectedProject && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
       e.preventDefault();
       stepProject(e.key === "ArrowRight" ? 1 : -1);
@@ -253,6 +251,12 @@ export function initJourney(): () => void {
 
   // leaving Projects clears the project focus so the camera settles on the section framing
   const unsub = useNavigationStore.subscribe((s, prev) => {
+    // Projects always shows exactly one project: the first, until the visitor picks another
+    if (s.active === "projects" && prev.active !== "projects" && !s.selectedProject) {
+      s.selectProject(projects[0].id);
+      focusOnHotspot(`project:${projects[0].id}`, 0.5, 1.14);
+      if (!journey.navigating) history.replaceState(null, "", `${location.pathname}${location.search}#projects/${projects[0].id}`);
+    }
     if (s.active !== prev.active && prev.active === "projects" && s.selectedProject) {
       focusCamera(null);
     }

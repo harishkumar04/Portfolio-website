@@ -43,7 +43,6 @@ export interface Portfolio {
   name: string;
   firstName: string;
   tagline: string;
-  disciplines: string[];
   intro: string[];
   interests: string[];
   summary: string;
@@ -64,50 +63,28 @@ export interface TimelineEntry {
   period?: string;
   location?: string;
   details?: string[];
-  /** Tools named for this entry in the resume */
-  tools?: string[];
-}
-
-export interface SkillItem {
-  name: string;
-  description: string;
 }
 
 export interface SkillCategory {
   id: string;
-  /** Manifest identifier, e.g. "CNT-01" */
-  code: string;
+  /** Full name, used for labels and the scene hover */
   label: string;
-  blurb: string;
-  items: SkillItem[];
-  relatedProjects: string[];
-}
-
-export interface ArchitectureLayer {
-  label: string;
+  /** Compact name for the tab */
+  short: string;
   items: string[];
 }
 
-/** One project = one "cargo shipment". Everything except id/title/category/summary is optional. */
+/** One project = one "cargo shipment". Only what the resume states; optional fields are hidden when empty. */
 export interface Project {
   /** URL-safe id used in deep links (#projects/<id>) */
   id: string;
-  /** Manifest identifier shown in the UI, e.g. "PRJ-01" */
-  code: string;
   title: string;
-  category: string;
   /** One or two sentences */
   summary: string;
-  problem?: string;
-  solution?: string;
-  architecture?: string;
-  /** Components grouped by role, rendered as an architecture diagram */
-  layers?: ArchitectureLayer[];
-  stack: string[];
-  contribution?: string;
-  decisions?: string[];
+  /** Three to five technologies shown as tags */
+  tags: string[];
   repo?: string;
   demo?: string;
-  /** Public path to a screenshot or architecture image, if one exists */
+  /** Public path to a screenshot, if one exists */
   image?: string;
 }

@@ -2,13 +2,9 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import gsap from "gsap";
-import { BufferAttribute, BufferGeometry, DoubleSide, Mesh, MeshBasicMaterial, Group, Plane, PlaneGeometry, Quaternion, Vector3, type Texture } from "three";
+import { BufferAttribute, BufferGeometry, DoubleSide, Mesh, MeshBasicMaterial, Plane, PlaneGeometry, Quaternion, Vector3, type Texture } from "three";
 import { sceneClock } from "@/lib/clock";
-import { projects } from "@/config/projects";
-import { chooseProject, stopSceneEvents } from "@/lib/journey";
-import { useNavigationStore } from "@/store/navigationStore";
 import { cardMaterial } from "./materials";
 import type { PlateProjection } from "./projection";
 import type { CraneDef, Px, SpriteDef } from "./types";
@@ -35,11 +31,6 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
   const spreader = useRef<Mesh>(null);
   const container = useRef<Mesh>(null);
   const cables = useRef<Mesh>(null);
-  // manifest tag riding on the carried container (Projects section); updated imperatively
-  const tag = useRef<Group>(null);
-  const tagBtn = useRef<HTMLButtonElement>(null);
-  const tagText = useRef<HTMLSpanElement>(null);
-  const tagState = useRef({ idx: -1, id: "" });
 
   const boomY = (x: number) => {
     const [[x0, y0], [x1, y1]] = crane.boom;
@@ -138,17 +129,6 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
       else px = [crane.pickup.trolleyX + (crane.rigAt[0] - tax) + off[0], crane.pickup.rigTopY + off[1]];
       const [x, y] = local(px);
       container.current.position.set(x, y, 0);
-      if (tag.current) tag.current.position.set(x, y + 42 * s, 0);
-      const idx = Math.floor(sceneClock.t / crane.cycle) % projects.length;
-      if (tagText.current && tagState.current.idx !== idx) {
-        tagState.current = { idx, id: projects[idx].id };
-        tagText.current.textContent = projects[idx].code;
-      }
-      if (tagBtn.current) {
-        const on = useNavigationStore.getState().active === "projects" && st.carry === ATTACHED;
-        tagBtn.current.style.opacity = on ? "1" : "0";
-        tagBtn.current.style.pointerEvents = on ? "auto" : "none";
-      }
       container.current.rotation.z = st.carry === ATTACHED ? -p.theta * 0.6 : 0;
       (container.current.material as MeshBasicMaterial).opacity = st.carry === WAITING ? st.fade : 1;
     }
@@ -182,16 +162,6 @@ export function CraneRig({ crane, depth, projection, sprites, textures }: Props)
   const order = (sp: SpriteDef, d: number) => sp.order ?? d;
   return (
     <>
-      <group ref={tag}>
-        <Html center zIndexRange={[20, 10]}>
-          <button ref={tagBtn} type="button" className="tag-beacon project crane-tag" style={{ opacity: 0, pointerEvents: "none" }}
-            {...stopSceneEvents}
-            onClick={(e) => { e.stopPropagation(); chooseProject(tagState.current.id); }} aria-label="Open the project on the crane's container">
-            <span className="tag-dot" aria-hidden />
-            <span ref={tagText} className="tag-text" />
-          </button>
-        </Html>
-      </group>
       <mesh ref={cables} geometry={geo.cables} material={mats.cable} renderOrder={order(sprites.spreader, 4)} frustumCulled={false} />
       <mesh ref={container} geometry={geo.container} material={mats.container} renderOrder={order(sprites.container, 4)} />
       <mesh ref={spreader} geometry={geo.spreader} material={mats.spreader} renderOrder={order(sprites.spreader, 4) + 0.1} />

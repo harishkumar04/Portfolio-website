@@ -31,15 +31,15 @@ export function LoadingScreen() {
       aria-live="polite"
       aria-label={`Loading the harbor, ${pct} percent`}
     >
-      <p className="meta">R Harish Kumar · Portfolio</p>
+      <span aria-hidden />
       <div>
         <h1 className="display text-[clamp(2.2rem,7vw,5rem)] text-warm-ivory">
           BEYOND<br />THE HORIZON
         </h1>
-        <p className="meta mt-6 text-sunset-amber">Harbor system initializing</p>
+        <p className="label label-amber mt-6">Harbor system initializing</p>
       </div>
       <div>
-        <div className="flex items-end justify-between font-mono text-xs tracking-[0.2em] text-muted-grey uppercase">
+        <div className="flex items-end justify-between font-mono text-xs tracking-[0.08em] text-muted-grey uppercase">
           <span>Scene loading</span>
           <span className="tabular-nums text-warm-ivory">{String(pct).padStart(2, "0")}%</span>
         </div>

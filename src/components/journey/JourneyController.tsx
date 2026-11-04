@@ -48,7 +48,7 @@ export function JourneyController() {
     const { id, project } = parseHash();
     if (id !== "home") {
       scrollToSection(id, { push: false, instant: true });
-      if (project) { chooseProject(project, { push: false }); focusOnHotspot(`project:${project}`, 0.5, 1.14); }
+      if (project) { chooseProject(project); focusOnHotspot(`project:${project}`, 0.5, 1.14); }
     }
     update();
     // intro: the camera eases in from slightly further out

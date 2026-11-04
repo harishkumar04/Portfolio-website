@@ -64,9 +64,8 @@ export function FallbackScene() {
       <img ref={img} src={artPlate} alt="A container harbor at sunset: a control tower, gantry cranes loading a cargo ship, ships sailing towards the sun" className="fallback-plate absolute inset-0 h-full w-full object-cover" style={{ transition: "none" }} draggable={false} />
       <div className="pointer-events-none fixed inset-0 z-20">
         {hotspots.map((h) => (
-          <button key={h.key} ref={(el) => { tags.current[h.key] = el; }} type="button" onClick={() => act(h)} className={`tag-beacon ${h.kind} pointer-events-auto absolute top-0 left-0`} style={{ display: "none" }} aria-label={`${h.tag}: ${h.label}`}>
-            <span className="tag-dot" aria-hidden />
-            <span className="tag-text">{h.tag}</span>
+          <button key={h.key} ref={(el) => { tags.current[h.key] = el; }} type="button" onClick={() => act(h)} className={`dot-marker ${h.kind} pointer-events-auto absolute top-0 left-0`} style={{ display: "none" }} aria-label={h.label}>
+            <span className="dot" aria-hidden />
           </button>
         ))}
       </div>

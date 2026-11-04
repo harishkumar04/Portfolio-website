@@ -17,13 +17,9 @@ export function HoverLabel() {
     return () => window.removeEventListener("pointermove", move);
   }, []);
   const h = hotspotByKey(hovered);
-  const verb = h?.kind === "nav" ? "Go to" : h?.kind === "skill" ? "Open" : "Open";
   return (
     <div ref={ref} className="pointer-events-none fixed top-0 left-0 z-[55] hidden [@media(hover:hover)]:block" aria-hidden>
-      <div className={`surface px-3.5 py-2.5 transition-opacity duration-200 ${h ? "opacity-100" : "opacity-0"}`}>
-        <p className="eyebrow">{h?.tag}</p>
-        <p className="mt-0.5 text-sm text-warm-ivory">{h && `${verb} ${h.label}`}{h?.hint && h.kind !== "nav" ? <span className="text-muted-grey"> · {h.hint}</span> : null}</p>
-      </div>
+      <div className={`hover-pill transition-opacity duration-200 ${h ? "opacity-100" : "opacity-0"}`}>{h?.label}</div>
     </div>
   );
 }

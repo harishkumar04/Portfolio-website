@@ -61,6 +61,14 @@ export function useSectionReveal(ref: RefObject<HTMLElement | null>, opts: { man
       ScrollTrigger.create({ trigger: root, start: opts.start ?? "top 65%", end: "bottom top", onEnter: play, onEnterBack: play, onToggle: (s) => { if (s.isActive) play(); } });
       // already past it (deep link / reload mid-page)
       if (root.getBoundingClientRect().top < window.innerHeight * 0.65) play();
+      // fail-safe: content must never stay hidden. If the section is on screen and nothing has
+      // played shortly after, finish the timeline instantly.
+      const guard = window.setInterval(() => {
+        const r = root.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.8 && r.bottom > 0 && tl.progress() === 0 && !tl.isActive()) { tl.progress(1); }
+        if (tl.progress() > 0) window.clearInterval(guard);
+      }, 1500);
+      return () => window.clearInterval(guard);
     }, root);
     return () => ctx.revert();
     // eslint-disable-next-line react-hooks/exhaustive-deps

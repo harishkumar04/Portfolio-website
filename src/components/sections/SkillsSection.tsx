@@ -1,28 +1,22 @@
 "use client";
 
 import { useRef } from "react";
-import { projects } from "@/config/projects";
-import { skillCategories, skillById } from "@/config/skills";
-import { chooseProject, chooseSkill, scrollToSection } from "@/lib/journey";
-import { projectsUsing } from "@/lib/skillContext";
+import { skillById, skillCategories } from "@/config/skills";
+import { chooseSkill } from "@/lib/journey";
 import { useSectionReveal } from "@/components/journey/useSectionReveal";
 import { useNavigationStore } from "@/store/navigationStore";
-import { Eyebrow, MaskHeading } from "./shared";
+import { MaskHeading, SkillIcon } from "./shared";
 
-/** Scene 03: the container terminal. Six containers, each opening one manifest of tools. */
+/** Skills: six containers, each a category of technologies (names and icons only). */
 export function SkillsSection() {
   const ref = useRef<HTMLElement>(null);
   useSectionReveal(ref);
   const selected = useNavigationStore((s) => s.selectedSkill);
   const cat = skillById(selected) ?? skillCategories[0];
-  const hovered = useNavigationStore((s) => s.hovered);
-  const setHovered = useNavigationStore((s) => s.setHovered);
-
-  const openProject = (id: string) => { scrollToSection("projects"); chooseProject(id, { push: false }); };
 
   const onKey = (e: React.KeyboardEvent) => {
     const i = skillCategories.findIndex((c) => c.id === cat.id);
-    const step = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+    const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
     if (!step) return;
     e.preventDefault();
     const next = skillCategories[(i + step + skillCategories.length) % skillCategories.length];
@@ -31,70 +25,31 @@ export function SkillsSection() {
   };
 
   return (
-    <section id="skills" ref={ref} aria-labelledby="skills-title" className="relative pt-[46svh] pb-16 lg:min-h-[140svh] lg:pt-0 lg:pb-0">
-      <div className="px-4 sm:px-8 lg:sticky lg:top-0 lg:flex lg:h-svh lg:items-center lg:justify-end lg:px-24 xl:pr-32">
-        <div className="surface pointer-events-auto w-full p-6 sm:p-8 lg:max-h-[calc(100svh-8rem)] lg:max-w-[34rem] lg:overflow-y-auto slim-scroll">
-          <Eyebrow num="03">Container terminal</Eyebrow>
-          <MaskHeading id="skills-title" lines={["Six containers.", "One toolkit."]} />
-          <p data-reveal="up" className="copy mt-3 text-sm">Pick a container on the quay, or here, to open its manifest. Descriptions define each tool; no ratings.</p>
-
-          <div data-reveal="group" role="tablist" aria-label="Skill containers" aria-orientation="vertical" onKeyDown={onKey} className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <section id="skills" ref={ref} aria-labelledby="skills-title" className="relative pt-[48svh] lg:min-h-[120svh] lg:pt-0">
+      <div className="lg:sticky lg:top-0 lg:flex lg:h-svh lg:items-center lg:justify-end lg:px-24 xl:pr-36">
+        <div className="panel panel-wide pointer-events-auto">
+          <MaskHeading id="skills-title" lines={["Skills"]} />
+          <div data-reveal="up" role="tablist" aria-label="Skill categories" onKeyDown={onKey} className="mt-4 flex flex-wrap gap-1.5">
             {skillCategories.map((c) => {
               const on = c.id === cat.id;
               return (
-                <button
-                  key={c.id}
-                  data-item
-                  data-cat={c.id}
-                  role="tab"
-                  type="button"
-                  id={`tab-${c.id}`}
-                  aria-selected={on}
-                  aria-controls="skill-panel"
-                  tabIndex={on ? 0 : -1}
-                  onClick={() => chooseSkill(c.id)}
-                  onMouseEnter={() => setHovered(`skill:${c.id}`)}
-                  onMouseLeave={() => setHovered(null)}
-                  className={`min-h-[4.2rem] rounded-[var(--radius-ui)] border px-3 py-2.5 text-left transition-colors duration-300 ${on ? "border-sunset-amber bg-sunset-amber/10" : hovered === `skill:${c.id}` ? "border-sunset-amber/60 bg-sunset-amber/[0.05]" : "border-warm-ivory/12 hover:border-warm-ivory/30"}`}
-                >
-                  <span className={`block font-mono text-[0.62rem] tracking-[0.2em] ${on ? "text-sunset-amber" : "text-muted-grey"}`}>{c.code}</span>
-                  <span className="mt-1 block text-[0.82rem] leading-snug text-warm-ivory">{c.label}</span>
+                <button key={c.id} data-cat={c.id} role="tab" type="button" id={`tab-${c.id}`} aria-selected={on} aria-controls="skill-panel" tabIndex={on ? 0 : -1} onClick={() => chooseSkill(c.id)}
+                  className={`min-h-9 rounded-[6px] border px-2.5 text-[0.85rem] transition-colors ${on ? "border-sunset-amber bg-sunset-amber text-midnight" : "border-warm-ivory/20 text-warm-ivory hover:border-sunset-amber/70"}`}>
+                  {c.short}
                 </button>
               );
             })}
           </div>
-
-          <div key={cat.id} id="skill-panel" role="tabpanel" aria-labelledby={`tab-${cat.id}`} tabIndex={0} className="mt-6">
-            <div className="rise">
-              <p className="meta">{cat.code} · {cat.items.length} items</p>
-              <p className="mt-1 text-sm text-muted-grey">{cat.blurb}</p>
-            </div>
-            <ul className="mt-4 divide-y divide-warm-ivory/10 border-y border-warm-ivory/10">
-              {cat.items.map((it, i) => {
-                const used = projectsUsing(it.name);
-                return (
-                  <li key={it.name} className="rise py-2.5" style={{ "--i": i + 1 } as React.CSSProperties}>
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                      <p className="text-warm-ivory">{it.name}</p>
-                      {used.length > 0 && (
-                        <p className="flex flex-wrap gap-x-2">
-                          {used.map((p) => (
-                            <button key={p.id} type="button" onClick={() => openProject(p.id)} title={`Used in ${p.title}`} className="font-mono text-[0.64rem] tracking-[0.14em] text-sunset-amber/90 transition-colors hover:text-golden-sand">{p.code}</button>
-                          ))}
-                        </p>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-grey">{it.description}</p>
-                  </li>
-                );
-              })}
-            </ul>
-            {used(cat) && <p className="meta mt-3">Project codes link to the cargo manifest.</p>}
-          </div>
+          <ul key={cat.id} id="skill-panel" role="tabpanel" aria-labelledby={`tab-${cat.id}`} className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-warm-ivory/12 pt-4">
+            {cat.items.map((name, i) => (
+              <li key={name} className="rise flex items-center gap-2.5 text-[0.95rem]" style={{ "--i": i } as React.CSSProperties}>
+                <SkillIcon name={name} />
+                {name}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
   );
 }
-
-const used = (c: (typeof skillCategories)[number]) => c.items.some((i) => projectsUsing(i.name).length > 0 && projects.length > 0);

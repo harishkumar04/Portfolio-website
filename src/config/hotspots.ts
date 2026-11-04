@@ -21,17 +21,15 @@ export interface Hotspot {
   layer: string;
   marker: [number, number];
   polygons: [number, number][][];
-  /** Short tag shown on the marker ("02", "CNT-03", "PRJ-04") */
-  tag: string;
+  /** Shown in the hover label */
   label: string;
-  hint?: string;
 }
 
 const rect = (x0: number, y0: number, x1: number, y1: number): [number, number][] => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
 
 const nav = (id: DestinationId, layer: string, marker: [number, number], polygons: [number, number][][]): Hotspot => {
   const d = destinationById(id);
-  return { key: `nav:${id}`, kind: "nav", target: id, layer, marker, polygons, tag: d.title, label: d.label, hint: d.hint };
+  return { key: `nav:${id}`, kind: "nav", target: id, layer, marker, polygons, label: d.title };
 };
 
 const navSpots: Hotspot[] = [
@@ -55,7 +53,7 @@ const skillShapes: Record<string, { marker: [number, number]; polygons: [number,
 const skillSpots: Hotspot[] = skillCategories.map((c) => ({
   key: `skill:${c.id}`, kind: "skill", target: c.id, layer: "foreground",
   marker: skillShapes[c.id].marker, polygons: skillShapes[c.id].polygons,
-  tag: c.code, label: c.label, hint: "Open container",
+  label: c.label,
 }));
 
 /** Container columns along the ship's deck stacks, one per project. */
@@ -65,7 +63,7 @@ const projectSpots: Hotspot[] = projects.map((p, i) => {
   return {
     key: `project:${p.id}`, kind: "project", target: p.id, layer: "ship",
     marker: [x0 + PROJECT_W / 2, 480], polygons: [rect(x0 + 1, 484, x0 + PROJECT_W - 1, 562)],
-    tag: p.code, label: p.title, hint: p.category,
+    label: p.title,
   };
 });
 

@@ -46,7 +46,7 @@ function Region({ h, p, depth, order, active }: { h: Hotspot; p: PlateProjection
     return new ShapeGeometry(shape);
   }), [h, p, depth]);
   const outlines = useMemo(() => h.polygons.map((poly) => [...poly, poly[0]].map((pt) => { const [x, y] = p.cardLocal(pt, depth); return [x, y, 0.01] as [number, number, number]; })), [h, p, depth]);
-  const mat = useMemo(() => new MeshBasicMaterial({ color: "#f0b469", transparent: true, opacity: 0, blending: AdditiveBlending, depthWrite: false, toneMapped: false }), []);
+  const mat = useMemo(() => new MeshBasicMaterial({ color: "#e9c68d", transparent: true, opacity: 0, blending: AdditiveBlending, depthWrite: false, toneMapped: false }), []);
   useEffect(() => () => { geos.forEach((g) => g.dispose()); mat.dispose(); }, [geos, mat]);
 
   const origin = useMemo(() => p.cardOrigin(depth), [p, depth]);
@@ -79,23 +79,22 @@ function Region({ h, p, depth, order, active }: { h: Hotspot; p: PlateProjection
       {geos.map((g, i) => (
         <mesh key={i} geometry={g} material={mat} renderOrder={order} onPointerOver={over} onPointerOut={out} onClick={click} />
       ))}
-      {selected && outlines.map((pts, i) => <Line key={i} points={pts} color="#f0b469" lineWidth={2} transparent opacity={0.9} depthTest={false} renderOrder={order + 0.1} />)}
+      {selected && outlines.map((pts, i) => <Line key={i} points={pts} color="#e9c68d" lineWidth={2} transparent opacity={0.95} depthTest={false} renderOrder={order + 0.1} />)}
       {showTag && (
         <Html position={marker} center zIndexRange={[20, 10]}>
           <button
             type="button"
-            className={`tag-beacon ${h.kind} ${selected ? "is-selected" : ""}`}
+            className={`dot-marker ${h.kind} ${selected ? "is-selected" : ""}`}
             {...stopSceneEvents}
             onClick={(e) => { e.stopPropagation(); act(); }}
             onMouseEnter={() => setHovered(h.key)}
             onMouseLeave={() => setHovered(null)}
             onFocus={() => setHovered(h.key)}
             onBlur={() => setHovered(null)}
-            aria-label={`${h.tag}: ${h.label}`}
+            aria-label={h.label}
             aria-pressed={h.kind === "nav" ? undefined : selected}
           >
-            <span className="tag-dot" aria-hidden />
-            <span className="tag-text">{h.tag}</span>
+            <span className="dot" aria-hidden />
           </button>
         </Html>
       )}
