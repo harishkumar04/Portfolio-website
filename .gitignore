@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# generated placeholder assets for the loader pipeline (npm run models:test)
-/public/models/__test__/
+# art pipeline debug output
+/art/*/_inpaint_mask.png

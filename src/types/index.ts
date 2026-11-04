@@ -6,8 +6,8 @@ export interface Destination {
   /** Nautical-style section name shown in the UI */
   title: string;
   key: string;
-  /** Predefined camera pose for the destination */
-  camera: { position: [number, number, number]; target: [number, number, number] };
+  /** Camera framing relative to the painting's home view (metres / degrees / zoom factor) */
+  camera: { offset: [number, number, number]; yaw: number; pitch: number; zoom: number };
 }
 
 export interface SocialLink {

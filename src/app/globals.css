@@ -21,3 +21,11 @@
 }
 
 html, body { height: 100%; background: var(--navy-900); color: var(--cream); font-family: var(--font-geist-sans), system-ui, sans-serif; }
+
+/* No-WebGL fallback: a slow cinematic drift over the painting. */
+@keyframes harbor-kenburns {
+  from { transform: scale(1.04) translate(0, 0); }
+  to { transform: scale(1.1) translate(-1.6%, -0.8%); }
+}
+.harbor-kenburns { animation: harbor-kenburns 40s ease-in-out infinite alternate; transform-origin: 60% 45%; }
+@media (prefers-reduced-motion: reduce) { .harbor-kenburns { animation: none; } }

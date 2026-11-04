@@ -1,0 +1,268 @@
+{
+ "name": "standin",
+ "camera": {
+  "fov": 45,
+  "height": 10,
+  "horizonY": 640
+ },
+ "crane": {
+  "card": "cranes",
+  "boom": [
+   [
+    880,
+    164
+   ],
+   [
+    1440,
+    214
+   ]
+  ],
+  "trolleyAt": [
+   1094,
+   182
+  ],
+  "rigAt": [
+   1143,
+   256
+  ],
+  "cableTops": [
+   [
+    1106,
+    204
+   ],
+   [
+    1122,
+    166
+   ],
+   [
+    1137,
+    170
+   ],
+   [
+    1152,
+    168
+   ]
+  ],
+  "cableBottoms": [
+   [
+    1106,
+    262
+   ],
+   [
+    1122,
+    262
+   ],
+   [
+    1137,
+    256
+   ],
+   [
+    1152,
+    255
+   ]
+  ],
+  "pickup": {
+   "trolleyX": 905,
+   "rigTopY": 560
+  },
+  "drop": {
+   "trolleyX": 1235,
+   "rigTopY": 410
+  },
+  "hoistRigTopY": 250,
+  "cycle": 32,
+  "containerAt": [
+   1134,
+   300
+  ],
+  "pickupHidden": true
+ },
+ "glows": [
+  {
+   "at": [
+    1540,
+    490
+   ],
+   "card": "sky",
+   "size": 260,
+   "color": "#ffb46a",
+   "pulse": 0.06
+  }
+ ],
+ "sun": {
+  "at": [
+   1540,
+   490
+  ],
+  "radius": 75
+ },
+ "focus": [
+  1150,
+  420
+ ],
+ "image": {
+  "width": 1920,
+  "height": 1080,
+  "clean": "clean.webp",
+  "plate": "plate.webp"
+ },
+ "layers": [
+  {
+   "id": "sky",
+   "type": "sky",
+   "file": "clean.webp",
+   "rect": [
+    0,
+    0,
+    1920,
+    1080
+   ]
+  },
+  {
+   "id": "clouds",
+   "type": "card",
+   "depth": 4200,
+   "order": 1,
+   "drift": {
+    "maxShift": 34,
+    "period": 90
+   },
+   "feather": 28,
+   "file": "clouds.webp",
+   "rect": [
+    1414,
+    0,
+    1920,
+    537
+   ]
+  },
+  {
+   "id": "sea",
+   "type": "ground",
+   "groundY": 0,
+   "kind": "water",
+   "file": "sea.webp",
+   "rect": [
+    873,
+    634,
+    1920,
+    1057
+   ]
+  },
+  {
+   "id": "quay",
+   "type": "ground",
+   "groundY": 3,
+   "file": "quay.webp",
+   "rect": [
+    0,
+    634,
+    1920,
+    1080
+   ]
+  },
+  {
+   "id": "cranes",
+   "type": "card",
+   "contactY": 740,
+   "ground": 3,
+   "order": 3,
+   "file": "cranes.webp",
+   "rect": [
+    133,
+    0,
+    1478,
+    767
+   ]
+  },
+  {
+   "id": "ship",
+   "type": "card",
+   "contactY": 832,
+   "ground": 0,
+   "order": 5,
+   "bob": {
+    "amplitude": 0.12,
+    "roll": 0.18,
+    "period": 7.5
+   },
+   "file": "ship.webp",
+   "rect": [
+    873,
+    331,
+    1480,
+    870
+   ]
+  },
+  {
+   "id": "foreground",
+   "type": "card",
+   "depth": 14,
+   "order": 9,
+   "file": "foreground.webp",
+   "rect": [
+    0,
+    532,
+    1920,
+    1080
+   ]
+  }
+ ],
+ "sprites": [
+  {
+   "id": "trolley",
+   "role": "trolley",
+   "card": "cranes",
+   "order": 6,
+   "file": "trolley.webp",
+   "rect": [
+    1060,
+    153,
+    1129,
+    211
+   ]
+  },
+  {
+   "id": "spreader",
+   "role": "spreader",
+   "card": "cranes",
+   "order": 4,
+   "file": "spreader.webp",
+   "rect": [
+    1100,
+    248,
+    1189,
+    277
+   ]
+  },
+  {
+   "id": "container",
+   "role": "container",
+   "card": "cranes",
+   "order": 4,
+   "file": "container.webp",
+   "rect": [
+    1082,
+    266,
+    1187,
+    339
+   ]
+  },
+  {
+   "id": "shipFar1",
+   "role": "distantShip",
+   "contactY": 680,
+   "ground": 0,
+   "order": 2,
+   "speed": 0.9,
+   "travel": 260,
+   "file": "shipFar1.webp",
+   "rect": [
+    1676,
+    482,
+    1871,
+    685
+   ]
+  }
+ ]
+}

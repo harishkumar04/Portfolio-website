@@ -1,12 +1,8 @@
 # Attributions
 
-All 3D geometry, textures and shaders currently shipped are original procedural work in this
-repository (`src/components/experience`, `src/lib/textures.ts`, `src/lib/shaders.ts`).
+| Asset | Author | Licence | Notes |
+|---|---|---|---|
+| Harbor artwork (`art/harbor/`, `public/art/harbor/`) | Supplied by the site owner | Owner's own artwork | Cut into layers by `scripts/art/build_layers.py` |
+| Stand-in plate (`art/standin/`, `public/art/standin/`) | Rendered from this repository's earlier procedural scene | Original work | Temporary, only used to validate the 2.5D engine |
 
-Third-party assets are added here as they are integrated. Keep this file in sync with the
-`source` fields in `src/config/assets.ts`.
-
-| Asset | Author | Source | Licence | Attribution / changes |
-|---|---|---|---|---|
-| Draco decoder (`public/draco/`) | Google | three.js distribution (`three/examples/jsm/libs/draco`) | Apache-2.0 | Unmodified |
-| Basis Universal transcoder (`public/basis/`) | Binomial LLC | three.js distribution (`three/examples/jsm/libs/basis`) | Apache-2.0 | Unmodified |
+All shaders and animation code are original work in this repository.
