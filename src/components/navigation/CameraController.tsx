@@ -22,6 +22,11 @@ export function CameraController() {
   const initialised = useRef(false);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
+  // dev-only handle so screenshots / debugging can pose the camera directly
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") (window as unknown as Record<string, unknown>).__cam = state.current;
+  }, []);
+
   useEffect(() => {
     const d = destinationById(current);
     const [px, py, pz] = d.camera.position;

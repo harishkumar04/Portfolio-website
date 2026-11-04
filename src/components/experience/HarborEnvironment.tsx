@@ -1,24 +1,48 @@
 "use client";
 
-/**
- * Phase 1 scaffold: proves the canvas, camera controller and render loop.
- * Replaced in Phase 2 by the real harbor (ocean, sky, terminal, cranes, ships).
- */
+import { lazy, Suspense, useEffect } from "react";
+import { Lighting } from "./Lighting";
+import { Sky } from "./Sky";
+import { Ocean } from "./Ocean";
+import { SceneClock } from "./SceneClock";
+import { Quay, LightMasts, YardTraffic, ApronVehicles } from "./Terminal";
+import { ControlTower, HarborOffice } from "./ControlTower";
+import { disposeTextures } from "@/lib/textures";
+import { disposeContainerCache } from "./Container";
+import { ContainerSourceProvider } from "./assets/ContainerSource";
+import Backplate from "./Backplate";
+
+// Heavy scenery streams in after the sky and sea are already on screen.
+const ContainerYard = lazy(() => import("./ContainerYard"));
+const Fleet = lazy(() => import("./Fleet"));
+const Headland = lazy(() => import("./Headland"));
+const ManifestStack = lazy(() => import("./ManifestStack"));
+
 export function HarborEnvironment() {
+  useEffect(() => () => { disposeTextures(); disposeContainerCache(); }, []);
   return (
-    <>
-      <color attach="background" args={["#f2a36b"]} />
-      <fog attach="fog" args={["#e8946a", 80, 900]} />
-      <ambientLight intensity={0.4} color="#8a7bb5" />
-      <directionalLight position={[-40, 30, -120]} intensity={2.2} color="#ffb067" />
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[4000, 4000]} />
-        <meshStandardMaterial color="#1e2a4a" roughness={0.3} metalness={0.4} />
-      </mesh>
-      <mesh position={[0, 4, 0]}>
-        <boxGeometry args={[12, 8, 6]} />
-        <meshStandardMaterial color="#c2562d" roughness={0.6} metalness={0.3} />
-      </mesh>
-    </>
+    <ContainerSourceProvider>
+      <SceneClock />
+      <Lighting />
+      <Sky />
+      <Ocean />
+      <Suspense fallback={null}>
+        <Headland />
+      </Suspense>
+      <Quay />
+      <LightMasts />
+      <ControlTower />
+      <HarborOffice />
+      <YardTraffic />
+      <ApronVehicles />
+      <Suspense fallback={null}>
+        <ContainerYard />
+        <ManifestStack />
+        <Fleet />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Backplate />
+      </Suspense>
+    </ContainerSourceProvider>
   );
 }

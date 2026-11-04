@@ -14,12 +14,12 @@ export default function HarborCanvas() {
     <Canvas
       className="!absolute inset-0"
       dpr={DPR[quality]}
-      camera={{ fov: 45, near: 0.5, far: 4000, position: [26, 11, 38] }}
+      camera={{ fov: 45, near: 1, far: 9000, position: [30, 9.5, 17] }}
       shadows={quality === "high"}
       gl={{ antialias: quality !== "low", powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping;
-        gl.toneMappingExposure = 0.9;
+        gl.toneMappingExposure = 0.85;
         gl.outputColorSpace = SRGBColorSpace;
       }}
     >

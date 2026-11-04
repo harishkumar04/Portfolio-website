@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useSyncExternalStore } from "react";
 import { detectQuality, hasWebGL } from "@/lib/webgl";
 import { useNavigationStore } from "@/store/navigationStore";
+import { sceneClock } from "@/lib/clock";
 
 // The heavy 3D bundle is only fetched on the client, after the shell has rendered.
 const HarborCanvas = dynamic(() => import("./HarborCanvas"), { ssr: false });
@@ -15,6 +16,8 @@ export function HarborExperience() {
   const setReducedMotion = useNavigationStore((s) => s.setReducedMotion);
 
   useEffect(() => {
+    // dev-only handle for screenshots / debugging
+    if (process.env.NODE_ENV !== "production") (window as unknown as Record<string, unknown>).__harbor = { nav: useNavigationStore, clock: sceneClock };
     setQuality(detectQuality());
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
